@@ -1,2 +1,2 @@
 # core-java
-Playing Around to get <bold>Comfortable<bold>
+Playing Around to get <bold>Comfortable</bold>
