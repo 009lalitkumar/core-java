@@ -2,7 +2,7 @@ class Account {
     double balance;
     String accountHolder;
 
-    void debit(double amount) {
+    protected void debit(double amount) {
         if (this.balance < amount) {
             System.out.println("Insufficient Balance");
         } else {
@@ -12,7 +12,7 @@ class Account {
         System.out.println("Balance : " + this.balance);
     }
 
-    void credit(double amount) {
+    protected void credit(double amount) {
         this.balance += amount;
         System.out.println("Credit Successful ");
         System.out.println("Updated Balance : " + this.balance);
