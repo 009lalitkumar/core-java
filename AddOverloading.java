@@ -10,17 +10,6 @@ class Add {
         return result;
     }
 
-    // static int add(int a, int b) {
-    // return a + b;
-    // }
-
-    // static int add(int a, int b, int c) {
-    // return add(add(a, b), c);
-    // }
-
-    // static int add(int a, int b, int c, int d) {
-    // return add(add(a, b, c), d);
-    // }
 }
 
 public class AddOverloading {
