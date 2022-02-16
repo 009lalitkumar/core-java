@@ -1,16 +1,26 @@
+import java.util.Scanner;
+
 class BankAccount {
-    private final int accNo;
+    static int count = 1;
+    int accNo;
     private double accBalance;
     private String accHolderName;
 
-    public BankAccount(int accNo, String accHolderName) {
-        this.accNo = accNo;
+    public BankAccount(String accHolderName) {
+        this.accNo = count;
+        count++;
         this.accHolderName = accHolderName;
     }
 
-    public BankAccount(int accNo, String accHolderName, double accBalance) {
-        this(accNo, accHolderName);
+    public BankAccount(String accHolderName, double accBalance) {
+        this(accHolderName);
         this.accBalance = accBalance;
+    }
+
+    public BankAccount(BankAccount account) {
+        this.accNo = account.accNo;
+        this.accHolderName = account.accHolderName;
+        this.accBalance = account.accBalance;
     }
 
     public int getAccNo() {
@@ -35,21 +45,25 @@ class BankAccount {
 
     @Override
     public String toString() {
-        return "accNo : " + accNo + "\naccHolderName : " + accHolderName + "\naccBalance : " + accBalance + "\n";
+        return "accNo : " + accNo + "\naccHolderName : " + accHolderName +
+                "\naccBalance : " + accBalance + "\n";
     }
 
+    public static BankAccount copy(BankAccount acc) {
+        return new BankAccount(acc);
+    }
 }
 
 class SavingAccount extends BankAccount {
     static double rateOfIntrest;
 
-    public SavingAccount(int accNo, String accHolderName) {
-        super(accNo, accHolderName);
+    public SavingAccount(String accHolderName) {
+        super(accHolderName);
         this.setAccHolderName(accHolderName);
     }
 
-    public SavingAccount(int accNo, String accHolderName, double accBalance) {
-        super(accNo, accHolderName, accBalance);
+    public SavingAccount(String accHolderName, double accBalance) {
+        super(accHolderName, accBalance);
     }
 
     public double getRateOfIntrest() {
@@ -77,21 +91,22 @@ class SavingAccount extends BankAccount {
 class CurrentAccount extends BankAccount {
     double avgDailyTransaction;
 
-    public CurrentAccount(int accNo, String accHolderName) {
-        super(accNo, accHolderName);
+    public CurrentAccount(String accHolderName) {
+        super(accHolderName);
     }
 
-    public CurrentAccount(int accNo, String accHolderName, double accBalance) {
-        super(accNo, accHolderName, accBalance);
+    public CurrentAccount(String accHolderName, double accBalance) {
+        super(accHolderName, accBalance);
     }
 
-    public CurrentAccount(double avgDailyTransaction, int accNo, String accHolderName) {
-        super(accNo, accHolderName);
+    public CurrentAccount(double avgDailyTransaction, String accHolderName) {
+        super(accHolderName);
         this.avgDailyTransaction = avgDailyTransaction;
     }
 
-    public CurrentAccount(double avgDailyTransaction, int accNo, String accHolderName, double accBalance) {
-        super(accNo, accHolderName, accBalance);
+    public CurrentAccount(double avgDailyTransaction, String accHolderName,
+            double accBalance) {
+        super(accHolderName, accBalance);
         this.avgDailyTransaction = avgDailyTransaction;
     }
 
@@ -105,7 +120,8 @@ class CurrentAccount extends BankAccount {
 
     @Override
     public String toString() {
-        return "Current Account :-\n" + super.toString() + "avgDailyTransaction : " + this.avgDailyTransaction + "\n";
+        return "Current Account :-\n" + super.toString() + "avgDailyTransaction : " +
+                this.avgDailyTransaction + "\n";
     }
 
     double getTotalTransactionAmount(int days) {
@@ -117,49 +133,33 @@ class CurrentAccount extends BankAccount {
     }
 }
 
-abstract class SalaryAccount extends BankAccount {
-    double salary;
-    double pfAmount;
-    double incomeTaxRate;
-
-    protected SalaryAccount(int accNo, String accHolderName) {
-        super(accNo, accHolderName);
-    }
-
-    protected SalaryAccount(int accNo, String accHolderName, double accBalance) {
-        super(accNo, accHolderName, accBalance);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + "salary :" + salary + "\nincomeTaxRate=" + incomeTaxRate + "\npfAmount=" + pfAmount
-                + "\n";
-    }
-
-    abstract double getYearlyTax();
-
-    abstract double getInHandSalary();
-}
-
 public class Bank {
-    public static void main(String[] args) {
-        BankAccount generalAcc = new BankAccount(1, "Lalit");
+    public static void classesDemos() {
+        BankAccount generalAcc = new BankAccount("Lalit");
         System.out.println(generalAcc);
 
-        SavingAccount savingsAcc = new SavingAccount(2, "Yusuf");
+        SavingAccount savingsAcc = new SavingAccount("Yusuf");
         System.out.println(savingsAcc);
         SavingAccount.setRateOfIntrest(3.4);
         savingsAcc.setAccBalance(20000);
         System.out.println("getYearlyIntrest : " + savingsAcc.getYearlyInterest());
-        System.out.println("getComputedInterest of 3 years : " + savingsAcc.getComputedInterest(3) + "\n");
+        System.out.println("getComputedInterest of 3 years : " +
+                savingsAcc.getComputedInterest(3) + "\n");
 
         CurrentAccount currentAcc = new CurrentAccount(3, "Bheru", 1200.50);
         currentAcc.setAvgDailyTransaction(400);
         System.out.println(currentAcc);
-        System.out.println("getYearlyTransaction : " + currentAcc.getYearlyTransaction());
-        System.out.println("getTotalTransactionAmount of 10 days : " + currentAcc.getTotalTransactionAmount(10) + "\n");
+        System.out.println("getYearlyTransaction : " +
+                currentAcc.getYearlyTransaction());
+        System.out.println("getTotalTransactionAmount of 10 days : " +
+                currentAcc.getTotalTransactionAmount(10) + "\n");
+    }
 
-        SalaryAccount salaryAcc = new SalaryAccount(4, "Dev") {
+    public static BankAccount salaryAccount(String name) {
+        return new BankAccount(name) {
+            double salary = 50000;
+            double pfAmount = 6000;
+            double incomeTaxRate = 5.5;
 
             double getYearlyTax() {
                 return salary * incomeTaxRate * 12 / 100;
@@ -169,12 +169,40 @@ public class Bank {
                 return (salary - getYearlyTax() / 12 - pfAmount);
             }
 
+            @Override
+            public String toString() {
+                return super.toString() + "salary : " + this.salary + ", pfAmount : " +
+                        this.pfAmount + "\n Yearly Tax : " + getYearlyTax() + "\nIn Hand Salary(Monthly) : "
+                        + getInHandSalary() + "\n";
+            }
         };
+    }
 
-        salaryAcc.salary = 50000;
-        salaryAcc.pfAmount = 3000;
-        salaryAcc.incomeTaxRate = 5;
-        System.out.println("getYearlyTax : " + salaryAcc.getYearlyTax());
-        System.out.println("Monthly getInHandSalary : " + salaryAcc.getInHandSalary());
+    public static void main(String[] args) {
+        classesDemos();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter no. of Accounts you wanna Create : ");
+        int n = scanner.nextInt();
+
+        SavingAccount[] savingsArray = new SavingAccount[n];
+        CurrentAccount[] currentArray = new CurrentAccount[n];
+        BankAccount[] salaryArray = new BankAccount[n];
+
+        for (int i = 0; i < n; i++) {
+            savingsArray[i] = new SavingAccount("saving " + (i + 1), 20000.0 * i);
+            currentArray[i] = new CurrentAccount("current " + (i + 1));
+            salaryArray[i] = salaryAccount("Salary " + (i + 1));
+            System.out.println(savingsArray[i]);
+            System.out.println(currentArray[i]);
+            System.out.println(salaryArray[i]);
+        }
+
+        BankAccount copySavingAccount = new BankAccount(savingsArray[0]);
+        System.out.println("Copy Account -\n" + copySavingAccount);
+
+        BankAccount copyCurrentAccount = BankAccount.copy(currentArray[0]);
+        System.out.println("Copy Account -\n" + copyCurrentAccount);
+
+        scanner.close();
     }
 }
