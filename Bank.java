@@ -52,6 +52,12 @@ class BankAccount {
     public static BankAccount copy(BankAccount acc) {
         return new BankAccount(acc);
     }
+
+    public BankAccount getStatement() {
+        System.out.println(
+                "Account Holder : " + this.accHolderName + "\nAccount Type : " + this.getClass().getName() + "\n");
+        return this;
+    }
 }
 
 class SavingAccount extends BankAccount {
@@ -85,6 +91,13 @@ class SavingAccount extends BankAccount {
 
     double getComputedInterest(int years) {
         return this.getYearlyInterest() * years;
+    }
+
+    @Override
+    public SavingAccount getStatement() {
+        System.out.println(
+                "Account Holder : " + this.getAccHolderName() + "\nAccount Type : " + this.getClass().getName() + "\n");
+        return this;
     }
 }
 
@@ -130,6 +143,13 @@ class CurrentAccount extends BankAccount {
 
     double getYearlyTransaction() {
         return getTotalTransactionAmount(365);
+    }
+
+    @Override
+    public CurrentAccount getStatement() {
+        System.out.println(
+                "Account Holder : " + this.getAccHolderName() + "\nAccount Type : " + this.getClass().getName() + "\n");
+        return this;
     }
 }
 
@@ -178,8 +198,7 @@ public class Bank {
         };
     }
 
-    public static void main(String[] args) {
-        classesDemos();
+    public static void accountArraysAndCopy() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter no. of Accounts you wanna Create : ");
         int n = scanner.nextInt();
@@ -204,5 +223,17 @@ public class Bank {
         System.out.println("Copy Account -\n" + copyCurrentAccount);
 
         scanner.close();
+    }
+
+    public static void main(String[] args) {
+        BankAccount generalAcc = new BankAccount("Lalit");
+
+        generalAcc.getStatement();
+
+        SavingAccount savingsAcc = new SavingAccount("Yusuf");
+        System.out.println(savingsAcc.getStatement());
+
+        CurrentAccount currentAcc = new CurrentAccount(3, "Bheru", 1200.50);
+        System.out.println(currentAcc.getStatement());
     }
 }
